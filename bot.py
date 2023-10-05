@@ -52,7 +52,6 @@ while True:
     if response['status'] == 'found':
         timestamp = response['last_attempt_timestamp']
         lesson_title = response['new_attempts'][0]['lesson_title']
-        lesson_url = response['new_attempts'][0]['lesson_url']
 
         if response['new_attempts'][0]['is_negative']:
             lesson_url = response['new_attempts'][0]['lesson_url']
