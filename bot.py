@@ -9,7 +9,7 @@ from telegram import Bot
 load_dotenv()
 DEVMAN_API_TOKEN = os.getenv('DEVMAN_API_TOKEN')
 TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
-USER_TG_ID = os.getenv('USER_TG_ID')
+TG_USER_ID = os.getenv('TG_USER_ID')
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -63,7 +63,7 @@ while True:
                           'можно приступать к следующему уроку!'
 
         bot.send_message(
-            chat_id=USER_TG_ID,
+            chat_id=TG_USER_ID,
             text=f'Преподаватель проверил работу "{lesson_title}"\n\n'
                  f'{result_text}'
         )
