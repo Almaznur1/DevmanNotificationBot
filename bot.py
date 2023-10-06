@@ -48,14 +48,14 @@ def main():
             print('Сервер не отвечает. Отправляю повторный запрос')
             continue
 
-        response = response.json()
+        reviews = response.json()
 
-        if response['status'] == 'found':
-            timestamp = response['last_attempt_timestamp']
-            lesson_title = response['new_attempts'][0]['lesson_title']
+        if reviews['status'] == 'found':
+            timestamp = reviews['last_attempt_timestamp']
+            lesson_title = reviews['new_attempts'][0]['lesson_title']
 
-            if response['new_attempts'][0]['is_negative']:
-                lesson_url = response['new_attempts'][0]['lesson_url']
+            if reviews['new_attempts'][0]['is_negative']:
+                lesson_url = reviews['new_attempts'][0]['lesson_url']
                 result_text = 'К сожалению, в работе нашлись ошибки.\n'\
                               f'Ссылка на ваш урок:\n{lesson_url}'
             else:
@@ -67,6 +67,7 @@ def main():
                 text=f'Преподаватель проверил работу "{lesson_title}"\n\n'
                      f'{result_text}'
             )
+
 
 if __name__ == '__main__':
     main()
