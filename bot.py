@@ -50,7 +50,10 @@ def main():
 
         reviews = response.json()
 
-        if reviews['status'] == 'found':
+        if reviews['status'] == 'timeout':
+            timestamp = reviews['timestamp_to_request']
+
+        elif reviews['status'] == 'found':
             timestamp = reviews['last_attempt_timestamp']
             lesson_title = reviews['new_attempts'][0]['lesson_title']
 
