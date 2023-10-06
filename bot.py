@@ -59,16 +59,20 @@ def main():
 
             if reviews['new_attempts'][0]['is_negative']:
                 lesson_url = reviews['new_attempts'][0]['lesson_url']
-                result_text = 'К сожалению, в работе нашлись ошибки.\n'\
-                              f'Ссылка на ваш урок:\n{lesson_url}'
+                result_text = f'''
+К сожалению, в работе нашлись ошибки.
+Ссылка на ваш урок:
+{lesson_url}'''
             else:
                 result_text = 'Преподавателю всё понравилось,'\
                               'можно приступать к следующему уроку!'
 
             bot.send_message(
                 chat_id=TG_USER_ID,
-                text=f'Преподаватель проверил работу "{lesson_title}"\n\n'
-                     f'{result_text}'
+                text=f'''
+Преподаватель проверил работу "{lesson_title}"
+
+{result_text}'''
             )
 
 
