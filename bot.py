@@ -6,16 +6,20 @@ import time
 from telegram import Bot
 
 
+logger = logging.getLogger(__file__)
+
+
 def main():
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.INFO
+    )
+    logging.info('Informational message')
+
     load_dotenv()
     devman_api_token = os.getenv('DEVMAN_API_TOKEN')
     tg_bot_token = os.getenv('TG_BOT_TOKEN')
     tg_user_id = os.getenv('TG_USER_ID')
-
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO)
-    logger = logging.getLogger(__name__)
 
     bot = Bot(token=tg_bot_token)
 
