@@ -8,20 +8,20 @@ from telegram import Bot
 
 def main():
     load_dotenv()
-    DEVMAN_API_TOKEN = os.getenv('DEVMAN_API_TOKEN')
-    TG_BOT_TOKEN = os.getenv('TG_BOT_TOKEN')
-    TG_USER_ID = os.getenv('TG_USER_ID')
+    devman_api_token = os.getenv('DEVMAN_API_TOKEN')
+    tg_bot_token = os.getenv('TG_BOT_TOKEN')
+    tg_user_id = os.getenv('TG_USER_ID')
 
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
-    bot = Bot(token=TG_BOT_TOKEN)
+    bot = Bot(token=tg_bot_token)
 
     url = 'https://dvmn.org/api/long_polling/'
     headers = {
-        'authorization': f'Token {DEVMAN_API_TOKEN}'
+        'authorization': f'Token {devman_api_token}'
     }
     timestamp = time.time()
 
@@ -68,7 +68,7 @@ def main():
                               'можно приступать к следующему уроку!'
 
             bot.send_message(
-                chat_id=TG_USER_ID,
+                chat_id=tg_user_id,
                 text=f'''
 Преподаватель проверил работу "{lesson_title}"
 
