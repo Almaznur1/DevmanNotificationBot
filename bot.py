@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import time
+import textwrap
 from telegram import Bot
 
 
@@ -64,19 +65,21 @@ def main():
             if reviews['new_attempts'][0]['is_negative']:
                 lesson_url = reviews['new_attempts'][0]['lesson_url']
                 result_text = f'''
-К сожалению, в работе нашлись ошибки.
-Ссылка на ваш урок:
-{lesson_url}'''
+            К сожалению, в работе нашлись ошибки.
+            Ссылка на ваш урок:
+            {lesson_url}'''
             else:
                 result_text = 'Преподавателю всё понравилось,'\
                               'можно приступать к следующему уроку!'
 
+            text = f'''
+            Преподаватель проверил работу "{lesson_title}"
+            {result_text}'''
+            text = textwrap.dedent(text)
+
             bot.send_message(
                 chat_id=tg_user_id,
-                text=f'''
-Преподаватель проверил работу "{lesson_title}"
-
-{result_text}'''
+                text=text
             )
 
 
