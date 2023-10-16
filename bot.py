@@ -16,6 +16,7 @@ class TelegramLogsHandler(logging.Handler):
 
     def emit(self, record):
         log_entry = self.format(record)
+        log_entry = log_entry[:4096]
         self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
 
 
@@ -57,14 +58,13 @@ def main():
             )
             response.raise_for_status()
 
-        except requests.exceptions.ConnectionError:
-            print('Возникли проблемы с сетью! Проверьте ваше соединение. '
-                  'Повторный запрос будет отправлен через 10 сек')
+        except requests.exceptions.ConnectionError as error:
+            logger.exception(error)
             time.sleep(10)
             continue
 
-        except requests.exceptions.ReadTimeout:
-            print('Сервер не отвечает. Отправляю повторный запрос')
+        except requests.exceptions.ReadTimeout as error:
+            logger.exception(error)
             continue
 
         try:
@@ -97,8 +97,7 @@ def main():
                     text=text
                 )
         except Exception as error:
-            logger.error('Бот упал с ошибкой:')
-            logger.error(error, exc_info=True)
+            logger.exception(error)
 
 
 if __name__ == '__main__':
