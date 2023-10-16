@@ -7,16 +7,23 @@ import textwrap
 from telegram import Bot
 
 
+class TelegramLogsHandler(logging.Handler):
+
+    def __init__(self, tg_bot, chat_id):
+        super().__init__()
+        self.chat_id = chat_id
+        self.tg_bot = tg_bot
+
+    def emit(self, record):
+        log_entry = self.format(record)
+        print(log_entry)
+        self.tg_bot.send_message(chat_id=self.chat_id, text=log_entry)
+
+
 logger = logging.getLogger(__file__)
 
 
 def main():
-    logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.INFO
-    )
-    logging.info('Informational message')
-
     load_dotenv()
     devman_api_token = os.getenv('DEVMAN_API_TOKEN')
     tg_bot_token = os.getenv('TG_BOT_TOKEN')
@@ -24,12 +31,20 @@ def main():
 
     bot = Bot(token=tg_bot_token)
 
+    logging.basicConfig(
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        level=logging.DEBUG
+    )
+    logging.debug('Informational message')
+    logger.addHandler(TelegramLogsHandler(bot, tg_user_id))
+
     url = 'https://dvmn.org/api/long_polling/'
     headers = {
         'authorization': f'Token {devman_api_token}'
     }
     timestamp = time.time()
 
+    logger.info('Бот запущен!')
     while True:
         params = {
             'timestamp': timestamp
