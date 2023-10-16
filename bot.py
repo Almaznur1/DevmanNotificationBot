@@ -33,9 +33,9 @@ def main():
 
     logging.basicConfig(
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        level=logging.DEBUG
+        level=logging.INFO
     )
-    logging.debug('Informational message')
+    logging.info('Informational message')
     logger.addHandler(TelegramLogsHandler(bot, tg_user_id))
 
     url = 'https://dvmn.org/api/long_polling/'
@@ -68,34 +68,38 @@ def main():
             print('Сервер не отвечает. Отправляю повторный запрос')
             continue
 
-        reviews = response.json()
+        try:
+            reviews = response.json()
 
-        if reviews['status'] == 'timeout':
-            timestamp = reviews['timestamp_to_request']
+            if reviews['status'] == 'timeout':
+                timestamp = reviews['timestamp_to_request']
 
-        elif reviews['status'] == 'found':
-            timestamp = reviews['last_attempt_timestamp']
-            lesson_title = reviews['new_attempts'][0]['lesson_title']
+            elif reviews['status'] == 'found':
+                timestamp = reviews['last_attempt_timestamp']
+                lesson_title = reviews['new_attempts'][0]['lesson_title']
 
-            if reviews['new_attempts'][0]['is_negative']:
-                lesson_url = reviews['new_attempts'][0]['lesson_url']
-                result_text = f'''
-            К сожалению, в работе нашлись ошибки.
-            Ссылка на ваш урок:
-            {lesson_url}'''
-            else:
-                result_text = 'Преподавателю всё понравилось,'\
-                              'можно приступать к следующему уроку!'
+                if reviews['new_attempts'][0]['is_negative']:
+                    lesson_url = reviews['new_attempts'][0]['lesson_url']
+                    result_text = f'''
+                К сожалению, в работе нашлись ошибки.
+                Ссылка на ваш урок:
+                {lesson_url}'''
+                else:
+                    result_text = 'Преподавателю всё понравилось,'\
+                                  'можно приступать к следующему уроку!'
 
-            text = f'''
-            Преподаватель проверил работу "{lesson_title}"
-            {result_text}'''
-            text = textwrap.dedent(text)
+                text = f'''
+                Преподаватель проверил работу "{lesson_title}"
+                {result_text}'''
+                text = textwrap.dedent(text)
 
-            bot.send_message(
-                chat_id=tg_user_id,
-                text=text
-            )
+                bot.send_message(
+                    chat_id=tg_user_id,
+                    text=text
+                )
+        except Exception as error:
+            logger.error('Бот упал с ошибкой:')
+            logger.error(error, exc_info=True)
 
 
 if __name__ == '__main__':
