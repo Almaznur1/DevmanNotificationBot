@@ -29,6 +29,20 @@ TG_USER_ID=<ваш телеграм id>
 python bot.py
 ```
 
+### Запуск в Docker-контейнере
+
+Для того чтобы развернуть приложение в контейнере:
+
+* установите [Docker](https://docs.docker.com/desktop/install/linux-install/) на вашем сервере (данная сборка предназначена для unix-подобных систем)
+* соберите образ контейнера:
+```sh
+docker build . -t dvmn_notification_bot
+```
+* запустите контейнер:
+```sh
+docker run --env-file ./.env dvmn_notification_bot
+```
+
 ### Цель проекта
 
 Код написан в образовательных целях на онлайн-курсе для веб-разработчиков [dvmn.org](https://dvmn.org/).
