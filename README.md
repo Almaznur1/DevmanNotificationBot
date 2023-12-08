@@ -40,7 +40,7 @@ docker build . -t dvmn_notification_bot
 ```
 * запустите контейнер:
 ```sh
-docker run --env-file ./.env dvmn_notification_bot
+docker run -d --env-file ./.env dvmn_notification_bot
 ```
 
 ### Цель проекта
